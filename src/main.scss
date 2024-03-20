@@ -1,0 +1,167 @@
+@use 'sass:color';
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap');
+@import 'https://unpkg.com/mono-icons@1.2.4/iconfont/icons.css';
+
+$tonos: 'primario' hsl(250, 83%, 23%), 'succes' hsl(357, 79%, 54%), 'danger' hsl(120, 65%, 45%);
+
+$position: 'left' 'bottom', 'left' 'top', 'right' 'bottom', 'right' 'top';
+
+$imagenes: 'nombre_1' 'https://loremflickr.com/320/240/dog', 'nombre_2' 'https://loremflickr.com/640/360', 'nombre_3' 'https://loremflickr.com/320/240/paris';
+
+
+
+@mixin imgPath(){
+  // establece la imagen de fondo del toast
+  // para cada uno de los nombres pasados como variable en $imagenes
+  @each $nombre, $url in $imagenes {
+    &-#{$nombre}{
+      background-image: url($url);
+    }
+  }
+}
+
+
+@mixin toast(){
+  @each $nombre, $color in $tonos {
+    // establece el fondo y el color de fuente
+    // del toast correspondiente al nombre pasado como variable
+    &-#{$nombre} {
+      background: $color;
+      color: #fff;
+
+      // establece el color de fuente y el fondo
+      // del botón del toast correspondiente al nombre pasado como variable
+      .toast__btn {
+        color: $color;
+        background: #fff;
+        &:hover {
+          background: color.adjust($color, $lightness: -80%, $alpha: -0.7);
+          color: color.adjust($color, $lightness: 80%, $alpha: -0.2);
+          outline: 1px solid color.adjust($color, $lightness: 25%, $alpha: -0.2);
+        }
+      }
+
+      // establece el fondo
+      // del icono de cierre del toast correspondiente al nombre pasado como variable
+      .toast__close {
+        background: $color;
+      }
+    }
+  }
+}
+
+//- ======== BASE ======== -//
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: rgb(39, 39, 39);
+  margin: 0;
+}
+
+.toast {
+  max-width: 350px;
+  position: relative;
+  padding: 1rem;
+  border-radius: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  box-shadow: 1px 1px 6px 2px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  margin: 1rem;
+
+  @include toast();
+  
+  // itera sobre los valores de las variables $position, que son tuplas de 2 valores
+  // cada tupla representa una posible posición del Toast: left/right y top/bottom
+  // para cada iteración, se crea un selector con el nombre de la clase correspondiente
+  // para ejemplo, si la iteración actual es ('left', 'top'), se crea el selector .toast-left-top
+  @each $x, $y in $position {
+    // se concatena el valor de $x y $y para crear el nombre de la clase
+    &-#{$x}-#{$y}, &-#{$y}-#{$x} {
+      // se establece la posición del Toast como fija (fixed)
+      position: fixed;
+      // si el primer valor de la tupla es 'left', se coloca el Toast a la izquierda del viewport
+      // si no, se coloca a la derecha
+      @if($x == 'left'){
+        left: 1rem;
+      } @else {
+        right: 1rem;
+      }
+      // si el segundo valor de la tupla es 'top', se coloca el Toast arriba del viewport
+      // si no, se coloca abajo
+      @if($y == 'top'){
+        top: 1rem;
+      } @else {
+        bottom: 1rem;
+      }
+    } 
+  }
+  
+  &__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    &:hover {
+      cursor: pointer;
+      transition: scale .3s ease-in-out;
+    }
+    &:active {
+      scale: 1.3;
+      transition: scale .3s;
+    }
+  }
+  
+  &__img {
+    flex-basis: 70px;
+    flex-grow: 1;
+    aspect-ratio: 1 / 1;
+    border-radius: 5px;
+    display: block;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    @include imgPath;
+    
+    // @each $nombre, $url in $imagenes {
+    //   background-image: url($img);
+    // }
+  }
+  
+  &__info {
+    display: flex;
+    flex-basis: 200px;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  &__title {
+    font-weight: 600;
+    text-shadow: 0 1px 3px black;
+  }
+  
+  &__description {
+    font-size: .8rem;
+    padding-block: .5rem;
+  }
+  
+  &__btn {
+    width: fit-content;
+    padding: .5rem;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 1px 1px 6px 2px rgba(0, 0, 0, 0.15);
+    background: #000;
+    color: white;
+    &:hover {
+      cursor: pointer;
+    }
+    
+    &:active {
+      scale: 1.1;
+      transition: scale .3s ease-in-out;
+    }
+  }
+}

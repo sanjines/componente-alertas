@@ -1,0 +1,1 @@
+sass --watch main.scss ../public/css/style.css & pug --watch index.pug --out '../public/' --pretty

@@ -1,0 +1,45 @@
+doctype html
+html(lang='es')
+  head
+    meta(charset='UTF-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title= 'Alertas'
+    link(rel='stylesheet', href='./css/style.css')
+  body
+    h1 Alertas en scss y pug
+    - 
+      const notification = [
+        {
+          classNames: 'toast toast-primario',
+          classNamesImg: 'toast__img toast__img-nombre_1',
+          title: 'Formulario de Usuario',
+          description: 'Formulario actualizado correctamente',
+          btnTxt: 'Visitanos'
+        },
+        {
+          classNames: 'toast toast-succes',
+          classNamesImg: 'toast__img toast__img-nombre_2',
+          title: 'Formulario de Usuario',
+          description: 'Formulario actualizado correctamente',
+          btnTxt: 'Ver más'
+        },
+        {
+          classNames: 'toast toast-danger',
+          classNamesImg: 'toast__img toast__img-nombre_3',
+          title: 'Formulario de Usuario',
+          description: 'Formulario actualizado correctamente',
+          btnTxt: 'Contactanos'
+        },
+      ]
+      
+    each list in notification
+      //- div.toast.toast-primario
+      div(class=list.classNames)
+        i.mi-close.toast__close
+        //- div.toast__img
+        div(class=list.classNamesImg)
+        div.toast__info
+          div.toast__title= list.title
+          div.toast__description= list.description
+          button.toast__btn= list.btnTxt
